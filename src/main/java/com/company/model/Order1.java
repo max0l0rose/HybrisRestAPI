@@ -4,9 +4,6 @@ import com.company.utils.MySet;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,18 +24,16 @@ import java.util.Set;
 )
 public class Order1 extends BaseEntity
 {
-	public final static String[][] headers = {{"Id", "user_id", "Status", "Created", "Modified" },};
-
-	@OneToOne
+	//@OneToOne
 	//@GeneratedValue//(strategy = GenerationType.IDENTITY)
-	@JoinColumn(referencedColumnName = "id")
-	private Order1 user;
+	//@JoinColumn(referencedColumnName = "id")
+	private long userId;
 
 	ProdStatus status = ProdStatus.IN_STOCK;
 
 
 	public Order1() {
-		this.user = this;
+		//this.user = this;
 	}
 
 	public Order1(ProdStatus status) {
@@ -49,7 +44,7 @@ public class Order1 extends BaseEntity
 
 
 	@OneToMany(mappedBy = "order",
-			//fetch = FetchType.LAZY
+			//fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL//, orphanRemoval = true
 	)
 //	@JoinColumn(
@@ -74,17 +69,17 @@ public class Order1 extends BaseEntity
 
 
 
-	public String[] toStringsArray() {
-		return new String[] {String.valueOf(id), String.valueOf(user.getId()), String.valueOf(status),
-				String.valueOf(created), String.valueOf(modified)};
-	}
+//	public String[] toStringsArray() {
+//		return new String[] {String.valueOf(id), String.valueOf(user.getId()), String.valueOf(status),
+//				String.valueOf(created), String.valueOf(modified)};
+//	}
 
 
 	@Override
 	public String toString() {
 		return "Order{"
 				       + id +
-				       ", user_id=" + user.getId() +
+				       ", user_id=" + userId +
 				       ", status=" + status +
 				       ", created=" + created +
 				       ", modified=" + modified +

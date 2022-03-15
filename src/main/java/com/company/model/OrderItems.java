@@ -13,15 +13,13 @@ import java.io.Serializable;
 ////		,allocationSize=1
 //)
 @Entity
-//@Data
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 //@Getter
 //@Setter
 //@SequenceGenerator(name = "sequenceGen", sequenceName = "seqDepart", allocationSize = 1)
-@Table(
-//		name = "order_items"
-)
+@Table
 @IdClass(OrderProductPK.class)
 public class OrderItems
 		//implements Serializable
@@ -41,42 +39,17 @@ public class OrderItems
 //	private long orderId;
 
 
-//	public OrderItems(Product product, Order1 order, int quantity) {
-//		this.product = product;
-//		this.order = order;
-//		this.quantity = quantity;
-//	}
-
-
 	//@Access(AccessType.PROPERTY)
 	@ManyToOne
 	//@JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
 	@Id
 	private Product product;
 
-//	public Product getProduct() {
-//		return product;
-//	}
-//
-//	public void setProduct(Product product) {
-//		this.product = product;
-//	}
-
-
 	//@Access(AccessType.PROPERTY)
 	@ManyToOne
 	//@JoinColumn(name = "order1", referencedColumnName = "id", nullable = false)
 	@Id
 	private Order1 order;
-
-//	public Order1 getOrder() {
-//		return order;
-//	}
-//
-//	public void setOrder(Order1 order) {
-//		this.order = order;
-//	}
-
 
 
 	//@Basic
@@ -95,12 +68,6 @@ public class OrderItems
 
 
 
-//	public String[] toStringsArray() {
-//		return new String[] {String.valueOf(id), String.valueOf(order_id), String.valueOf(status),
-//				String.valueOf(created), String.valueOf(modified)};
-//	}
-
-
 //	@Override
 //	public String toString() {
 //		return "Order{"
@@ -112,32 +79,33 @@ public class OrderItems
 //				       '}';
 //	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-//		String cname = getClass().getName(); // norm
-//		String oname = o.getClass().getName();
-		if (o == null || getClass() != o.getClass())
-			return false;
 
-		OrderItems that = (OrderItems) o;
-
-		//if (quantity != that.quantity) return false;
-		if (!product.equals(that.product))
-			return false;
-		return order.equals(that.order);
-	}
-
-
-
-	@Override
-	public int hashCode() {
-		int result = (int)product.id;
-		result = 31 * result + (int)order.id;
-		//result = 31 * result + quantity;
-		return result;
-	}
+//	@Override
+//	public boolean equals(Object o) {
+//		if (this == o)
+//			return true;
+////		String cname = getClass().getName(); // norm
+////		String oname = o.getClass().getName();
+//		if (o == null || getClass() != o.getClass())
+//			return false;
+//
+//		OrderItems that = (OrderItems) o;
+//
+//		//if (quantity != that.quantity) return false;
+//		if (!product.equals(that.product))
+//			return false;
+//		return order.equals(that.order);
+//	}
+//
+//
+//
+//	@Override
+//	public int hashCode() {
+//		int result = (int)product.id;
+//		result = 31 * result + (int)order.id;
+//		//result = 31 * result + quantity;
+//		return result;
+//	}
 }
 
 

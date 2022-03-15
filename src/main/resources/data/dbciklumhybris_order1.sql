@@ -1,0 +1,4 @@
+INSERT INTO dbciklumhybris.order1 (id, created_at, modified, version, status, user_id) VALUES (1, '2021-10-20 21:46:44', '2021-10-20 21:46:44', 0, 1, 1);
+INSERT INTO dbciklumhybris.order1 (id, created_at, modified, version, status, user_id) VALUES (2, '2021-10-20 21:46:44', '2021-10-20 21:46:44', 0, 1, 2);
+INSERT INTO dbciklumhybris.order1 (id, created_at, modified, version, status, user_id) VALUES (3, '2021-10-20 21:46:44', '2021-10-20 21:46:44', 0, 1, 3);
+INSERT INTO dbciklumhybris.order1 (id, created_at, modified, version, status, user_id) VALUES (4, '2021-10-20 21:48:09', '2021-10-20 21:48:09', 0, 1, 4);

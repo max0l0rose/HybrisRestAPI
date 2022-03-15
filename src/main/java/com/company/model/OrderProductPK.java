@@ -40,16 +40,16 @@ public class OrderProductPK implements Serializable {
 
 
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		OrderProductPK that = (OrderProductPK) o;
-		return product == that.product && order == that.order;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(product, order);
-	}
+//	@Override
+//	public boolean equals(Object o) {
+//		if (this == o) return true;
+//		if (o == null || getClass() != o.getClass()) return false;
+//		OrderProductPK that = (OrderProductPK) o;
+//		return product == that.product && order == that.order;
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(product, order);
+//	}
 }

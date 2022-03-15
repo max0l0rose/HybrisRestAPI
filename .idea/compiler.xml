@@ -7,15 +7,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SpringShellCiklumHybris" />
+        <module name="HybrisRestAPI" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="HybrisRestAPI" target="8" />
       <module name="SpringShellCiklumHybris" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="HybrisRestAPI" options="-parameters" />
       <module name="SpringShellCiklumHybris" options="-parameters" />
     </option>
   </component>

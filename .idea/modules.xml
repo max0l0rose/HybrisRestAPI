@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SpringShellCiklumHybris.iml" filepath="$PROJECT_DIR$/SpringShellCiklumHybris.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HybrisRestAPI.iml" filepath="$PROJECT_DIR$/HybrisRestAPI.iml" />
     </modules>
   </component>
 </project>

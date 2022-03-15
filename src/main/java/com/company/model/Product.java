@@ -4,7 +4,6 @@ import com.company.utils.MySet;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,11 +21,7 @@ import java.util.Set;
 public class Product extends BaseEntity
 //		implements StringsArray
 {
-
-	public final static String[][] headers = {{"Id", "ProdName", "Price", "Status", "Created", "Modified" },};
-
-	@NotNull
-	@Column(length = 100, columnDefinition = "varchar(50) default 'Shampoo'") // ;)
+	@Column(length = 100, columnDefinition = "varchar(50) default 'Shampoo'", nullable = false) // ;)
 	String name;
 
 	int price;
@@ -69,12 +64,12 @@ public class Product extends BaseEntity
 //	List<Order> orders;
 
 
-	public String[] toStringsArray() {
-		return new String[] {
-				String.valueOf(id), String.valueOf(name), String.valueOf(price),
-				String.valueOf(status), String.valueOf(created), String.valueOf(modified)
-		};
-	}
+//	public String[] toStringsArray() {
+//		return new String[] {
+//				String.valueOf(id), String.valueOf(name), String.valueOf(price),
+//				String.valueOf(status), String.valueOf(created), String.valueOf(modified)
+//		};
+//	}
 
 //	public static String[] getHeaders() {
 //		return new String[] {String.valueOf(id), String.valueOf(username), String.valueOf(department), String.valueOf(created), String.valueOf(modified)};

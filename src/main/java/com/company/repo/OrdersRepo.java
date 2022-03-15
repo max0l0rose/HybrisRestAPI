@@ -1,9 +1,11 @@
 package com.company.repo;
 
+import com.company.dto.OrdersFindAllView;
 import com.company.model.Order1;
-import com.company.view.OrdersFindAllView;
+import com.company.model.OrderProj1;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,7 +13,9 @@ import java.util.List;
 //import org.springframework.data.repository.PagingAndSortingRepository;
 
 
-//@Lazy
+@RepositoryRestResource(collectionResourceRel = "orders", path = "orders"//, exported = false
+//		, excerptProjection = OrderProj1.class
+)
 public interface OrdersRepo extends
 					JpaRepository<Order1, Long>
 					//PagingAndSortingRepository<Order, Long>

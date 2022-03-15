@@ -1,14 +1,19 @@
 package com.company.repo;
 
+import com.company.dto.ProductsByOrderView;
+import com.company.model.ProdProj1;
 import com.company.model.Product;
-import com.company.view.ProductsByOrderView;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
 //@Lazy
+@RepositoryRestResource(
+//		excerptProjection = ProdProj1.class
+)
 public interface ProdRepo extends //Repository<User, Long>
 									CrudRepository<Product, Long>
 {

@@ -1,9 +1,12 @@
 package com.company.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.core.annotation.Order;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -11,13 +14,12 @@ import java.util.Objects;
 //@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @MappedSuperclass
-public abstract class BaseEntity
-								implements StringsArray
+public abstract class BaseEntity implements Serializable
+										//implements StringsArray
 {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "sequenceGen")
-
+	//@JsonProperty
 //	@GeneratedValue(generator = "idSequence")
 //	@SequenceGenerator(//schema = "MYORASCHEMA",
 //			name = "idSequence",
@@ -29,6 +31,7 @@ public abstract class BaseEntity
 	long id;
 
 	@Column(columnDefinition = "integer default 0")
+	@JsonIgnore // works!
 	int version;
 
 	//@Temporal(TemporalType.TIMESTAMP) // ERROR
@@ -45,9 +48,9 @@ public abstract class BaseEntity
 	Instant modified; //LocalDateTime
 
 
-	public String[] toStringsArray() {
-		return new String[] {String.valueOf(id), String.valueOf(created), String.valueOf(modified)};
-	}
+//	public String[] toStringsArray() {
+//		return new String[] {String.valueOf(id), String.valueOf(created), String.valueOf(modified)};
+//	}
 
 //	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 //	OffsetDateTime created_offsetDT;
