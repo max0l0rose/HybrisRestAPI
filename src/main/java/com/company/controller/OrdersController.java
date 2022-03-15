@@ -18,10 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestController
 //@RequestMapping("/orders")
@@ -57,12 +54,12 @@ public class OrdersController {
 		return ResponseEntity.status(HttpStatus.OK).body(page);
 	}
 
-	@GetMapping(value = "/first")
-	public ResponseEntity<Order1> first() {
-		ordersRepo.findById(0L).ifPresent(c -> {
-			ResponseEntity.status(HttpStatus.OK).body(c);
-			return;
-		});
+	@GetMapping(value = "/getorder/{id}")
+	public ResponseEntity<Order1> firstorder(@PathVariable long id) {
+		Optional<Order1> optional = ordersRepo.findById(id);
+		if (optional.isPresent())
+			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 
 	//	Map<Long, Integer> extractIdsAndQuantity(String idsAndQuantity)

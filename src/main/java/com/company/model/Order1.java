@@ -1,6 +1,7 @@
 package com.company.model;
 
 import com.company.utils.MySet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,7 +45,7 @@ public class Order1 extends BaseEntity
 
 
 	@OneToMany(mappedBy = "order",
-			//fetch = FetchType.LAZY,
+			fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL//, orphanRemoval = true
 	)
 //	@JoinColumn(

@@ -12,7 +12,7 @@ import java.util.List;
 
 //@Lazy
 @RepositoryRestResource(
-//		excerptProjection = ProdProj1.class
+		excerptProjection = ProdProj1.class
 )
 public interface ProdRepo extends //Repository<User, Long>
 									CrudRepository<Product, Long>

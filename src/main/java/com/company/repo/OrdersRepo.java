@@ -2,7 +2,6 @@ package com.company.repo;
 
 import com.company.dto.OrdersFindAllView;
 import com.company.model.Order1;
-import com.company.model.OrderProj1;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
