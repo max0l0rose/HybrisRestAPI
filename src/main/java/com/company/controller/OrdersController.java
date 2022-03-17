@@ -1,19 +1,12 @@
 package com.company.controller;
 
+import com.company.dto.OrderProj2;
 import com.company.model.Order1;
-import com.company.model.ProdStatus;
 import com.company.model.Product;
-import com.company.repo.OrderItemsRepo;
 import com.company.repo.OrdersRepo;
-import com.company.repo.ProdRepo;
-import com.company.services.OrdersService;
-import com.company.services.ProductService;
-import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-//@RequestMapping("/orders")
+@RequestMapping("/orders")
 public class OrdersController {
 	private final Map<String,Object> session = new HashMap<>();
 
@@ -47,20 +40,22 @@ public class OrdersController {
 //	}
 
 
-	//@RestResource(rel = "qqq-contains", path="qqq-contains")
-	@GetMapping(value = "/qqq")
-	public ResponseEntity<Page<Order1>> qqq(Pageable pageable) {
-		Page<Order1> page = ordersRepo.findAll(pageable);
-		return ResponseEntity.status(HttpStatus.OK).body(page);
-	}
-
-	@GetMapping(value = "/getorder/{id}")
-	public ResponseEntity<Order1> firstorder(@PathVariable long id) {
-		Optional<Order1> optional = ordersRepo.findById(id);
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<OrderProj2> firstorder(@PathVariable long id) {
+		Optional<OrderProj2> optional = ordersRepo.findById(id, OrderProj2.class);
 		if (optional.isPresent())
 			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
+
+
+	//@RestResource(rel = "qqq-contains", path="qqq-contains")
+	@GetMapping(value = "/page")
+	public ResponseEntity<Page<?>> page(Pageable pageable) {
+		Page<?> page = ordersRepo.findAllProjectedBy(pageable, OrderProj2.class);
+		return ResponseEntity.status(HttpStatus.OK).body(page);
+	}
+
 
 	//	Map<Long, Integer> extractIdsAndQuantity(String idsAndQuantity)
 //	{

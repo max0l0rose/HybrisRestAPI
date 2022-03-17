@@ -7,11 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import javax.persistence.EntityManager;
@@ -32,39 +27,39 @@ import java.util.stream.Collectors;
 //}
 
 
-// adds Id field in response
-@Configuration
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-class SpringRestConfiguration implements RepositoryRestConfigurer {
-
-	final EntityManager entityManager;
-
-	@Override
-	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-//		RepositoryRestConfigurer.super.configureRepositoryRestConfiguration(config, cors);
-//		config.setDefaultMediaType(MediaType.APPLICATION_JSON);
-//		config.useHalAsDefaultJsonMediaType(false);
-		Class[] cl = entityManager.getMetamodel().getEntities().stream().map(e -> e.getJavaType())
-				.collect(Collectors.toList()).toArray(new Class[0]);
-		config.exposeIdsFor(cl);
-	}
-
-
-//	@Bean
-//	public RepresentationModelProcessor<EntityModel<Order1>> personProcessor() {
+//// adds Id field in response
+//@Configuration
+//@RequiredArgsConstructor
+//@FieldDefaults(level = AccessLevel.PRIVATE)
+//class SpringRestConfiguration implements RepositoryRestConfigurer {
 //
-//		return new RepresentationModelProcessor<EntityModel<Order1>>() {
+//	final EntityManager entityManager;
 //
-//			@Override
-//			public EntityModel<Order1> process(EntityModel<Order1> model) {
-//				model.removeLinks();
-//				//model.add(new Link("http://localhost:8080/qqq", "added-link"));
-//				return model;
-//			}
-//		};
+//	@Override
+//	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
+////		RepositoryRestConfigurer.super.configureRepositoryRestConfiguration(config, cors);
+////		config.setDefaultMediaType(MediaType.APPLICATION_JSON);
+////		config.useHalAsDefaultJsonMediaType(false);
+//		Class[] cl = entityManager.getMetamodel().getEntities().stream().map(e -> e.getJavaType())
+//				.collect(Collectors.toList()).toArray(new Class[0]);
+//		config.exposeIdsFor(cl);
 //	}
-}
+//
+//
+////	@Bean
+////	public RepresentationModelProcessor<EntityModel<Order1>> personProcessor() {
+////
+////		return new RepresentationModelProcessor<EntityModel<Order1>>() {
+////
+////			@Override
+////			public EntityModel<Order1> process(EntityModel<Order1> model) {
+////				model.removeLinks();
+////				//model.add(new Link("http://localhost:8080/qqq", "added-link"));
+////				return model;
+////			}
+////		};
+////	}
+//}
 
 
 //@Configuration

@@ -1,25 +1,33 @@
 package com.company.repo;
 
 import com.company.dto.ProductsByOrderView;
-import com.company.model.ProdProj1;
 import com.company.model.Product;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+//import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 //@Lazy
-@RepositoryRestResource(
-		excerptProjection = ProdProj1.class
-)
-public interface ProdRepo extends //Repository<User, Long>
-									CrudRepository<Product, Long>
+//@RepositoryRestResource(
+//		excerptProjection = ProdProj1.class
+//)
+public interface ProductsRepo extends //Repository<User, Long>
+									//CrudRepository<Product, Long>
+									JpaRepository<Product, Long>
 {
 	//Product findByName(String name);
 
 	//List<Product> findByOrderItems_OrderId(long oId);
+
+	<T> Optional<T> findById(long id, Class<T> tClass);
+	<T> Page<T> findAllProjectedBy(Pageable pageable, Class<T> tClass);
+
+	//@Override
+	//<T> T save(T entity, Class<T> tClass);
 
 	@Query("select p as product, oi.quantity as quantity from Product p join p.orderItems oi where oi.order.id = ?1")
 	List<ProductsByOrderView> findProductsByOrderId(long oId);

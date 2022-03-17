@@ -45,7 +45,7 @@ public class Order1 extends BaseEntity
 
 
 	@OneToMany(mappedBy = "order",
-			fetch = FetchType.EAGER,
+			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL//, orphanRemoval = true
 	)
 //	@JoinColumn(
@@ -56,6 +56,7 @@ public class Order1 extends BaseEntity
 //			joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")},
 //			inverseJoinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")}
 //	)
+	//@JsonIgnore
 	private Set<OrderItems> orderItems = new MySet<>();
 
 

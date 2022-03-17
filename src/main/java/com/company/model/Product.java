@@ -1,6 +1,7 @@
 package com.company.model;
 
 import com.company.utils.MySet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,7 +43,7 @@ public class Product extends BaseEntity
 	}
 
 	@OneToMany(mappedBy = "product",
-			//fetch = FetchType.LAZY
+			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL//, orphanRemoval = true
 	)
 //	@JoinColumn(
@@ -53,6 +54,7 @@ public class Product extends BaseEntity
 //			joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")},
 //			inverseJoinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")}
 //	)
+	//@JsonIgnore
 	private Set<OrderItems> orderItems = new MySet<>();
 
 //	@ManyToMany(//mappedBy = "products"

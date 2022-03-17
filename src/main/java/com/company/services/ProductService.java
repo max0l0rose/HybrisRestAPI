@@ -1,12 +1,10 @@
 package com.company.services;
 
 import com.company.model.Product;
-import com.company.repo.OrderItemsRepo;
-import com.company.repo.ProdRepo;
+import com.company.repo.ProductsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -18,7 +16,7 @@ public class ProductService implements MyService<Product>{
 //	private static Connection conn;
 
 	@Autowired
-	private ProdRepo prodRepository;
+	private ProductsRepo prodRepository;
 
 //	@Autowired
 //	OrderItemsRepo orderItemsRepo;

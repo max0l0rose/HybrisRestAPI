@@ -44,6 +44,7 @@ public class OrderItems
 	@ManyToOne
 	//@JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
 	@Id
+	@JsonIgnore
 	private Product product;
 
 	//@Access(AccessType.PROPERTY)
