@@ -5,6 +5,8 @@ import com.company.dto.ProdProj1;
 import com.company.model.Product;
 import com.company.repo.ProductsRepo;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.Provider;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,9 @@ public class ProductsController
 	@PostMapping()
 	public ResponseEntity<ProdDto1> save(@RequestBody Product product) {
 		Product pa = productsRepo.save(product);
+		Provider<ProdDto1> provider = p -> new ProdDto1(null);
+		TypeMap<ProdDto1, ProdDto1> propertyMapper = modelMapper.createTypeMap(ProdDto1.class, ProdDto1.class);
+		propertyMapper.setProvider(provider);
 		ProdDto1 p2 = modelMapper.map(pa, ProdDto1.class);
 		return ResponseEntity.status(HttpStatus.OK).body(p2);
 		//return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

@@ -12,7 +12,7 @@ import java.util.Set;
 
 //@Projection(name = "prodProj1", types = { Product.class })
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 public class ProdDto1 {
 	//void setName(String name);
