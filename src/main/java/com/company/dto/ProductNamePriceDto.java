@@ -14,9 +14,10 @@ import java.util.Set;
 @Data
 //@NoArgsConstructor
 @AllArgsConstructor
-public class ProdDto1 {
+public class ProductNamePriceDto {
 	//void setName(String name);
 	String name;
-	Set<OrderItemsProj> orderItems;
+	int price;
+	//Set<OrderItemsProj> orderItems;
 }
 

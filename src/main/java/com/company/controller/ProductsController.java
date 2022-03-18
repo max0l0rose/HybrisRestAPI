@@ -1,22 +1,29 @@
 package com.company.controller;
 
-import com.company.dto.ProdDto1;
-import com.company.dto.ProdProj1;
+import com.company.dto.ProductNamePriceDto;
 import com.company.model.Product;
 import com.company.repo.ProductsRepo;
+import com.company.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.Provider;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.*;
 import java.util.Optional;
+import java.util.Set;
 
 //@ShellComponent()
 @RestController
 @RequestMapping("/products")
+@Validated
 public class ProductsController
 		//extends SecuredCommand
 {
@@ -37,25 +44,67 @@ public class ProductsController
 
 
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<ProdDto1> byid(@PathVariable long id) {
-		Optional<ProdDto1> optional = productsRepo.findById(id, ProdDto1.class);
+	@GetMapping(value = "/{id}/dto")
+	public ResponseEntity<ProductNamePriceDto> getByIdDto(@PathVariable long id) {
+		Optional<ProductNamePriceDto> optional = productsRepo.findById(id, ProductNamePriceDto.class); // it is better for SQL
 		if (optional.isPresent())
 			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 
 
-	@PostMapping()
-	public ResponseEntity<ProdDto1> save(@RequestBody Product product) {
-		Product pa = productsRepo.save(product);
-		Provider<ProdDto1> provider = p -> new ProdDto1(null, null);
-		TypeMap<Product, ProdDto1> propertyMapper = modelMapper.createTypeMap(Product.class, ProdDto1.class);
-		propertyMapper.setProvider(provider);
-		ProdDto1 p2 = modelMapper.map(pa, ProdDto1.class);
-		return ResponseEntity.status(HttpStatus.OK).body(p2);
-		//return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	@GetMapping(value = "/{id}")
+	@JsonView(value = View.UserView.External.class)
+	public ResponseEntity<Product> getById(@PathVariable long id) {
+		Optional<Product> optional = productsRepo.findById(id); // gets full object
+		if (optional.isPresent())
+			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
+
+	@GetMapping(value = "/{id}/int")
+	@JsonView(value = View.UserView.Internal.class)
+	public ResponseEntity<Product> getByIdInt(@PathVariable long id) {
+		Optional<Product> optional = productsRepo.findById(id);
+		if (optional.isPresent())
+			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+
+
+	// cool. select after insert doesnt happen!
+	@PostMapping()
+	@JsonView(value = View.UserView.Post.class)
+	public ResponseEntity<Product> save(
+			final @Valid @RequestBody @JsonView(value = View.UserView.Post.class) Product prod, BindingResult result
+	) {
+//		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//		Validator validator = factory.getValidator();
+//		Set<ConstraintViolation<Product>> violations = validator.validate(prod);
+
+		Product pa = null;
+		try {
+			pa = productsRepo.save(prod);
+			return ResponseEntity.status(HttpStatus.OK).body(pa);
+		} catch (DataIntegrityViolationException e) {
+			e.printStackTrace();
+		}
+
+//		Provider<ProductNamePriceDto> provider = p -> new ProductNamePriceDto(null, 0);
+//		TypeMap<Product, ProductNamePriceDto> propertyMapper = modelMapper.createTypeMap(Product.class, ProductNamePriceDto.class);
+//		propertyMapper.setProvider(provider);
+//		ProductNamePriceDto p2 = modelMapper.map(pa, ProductNamePriceDto.class);
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+	}
+
+
+//	// w/o this - 500
+//	@ExceptionHandler(ConstraintViolationException.class)
+//	@ResponseStatus(HttpStatus.BAD_REQUEST)
+//	ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+//		return new ResponseEntity<>("Nnnot valid: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+//	}
 
 
 //	@ShellMethod(key = {"addProduct", "addp", "ap"}, value = "Add/Create product..")
