@@ -17,6 +17,6 @@ import java.util.Set;
 public class ProdDto1 {
 	//void setName(String name);
 	String name;
-	//Set<OrderItems> orderItems;
+	Set<OrderItemsProj> orderItems;
 }
 

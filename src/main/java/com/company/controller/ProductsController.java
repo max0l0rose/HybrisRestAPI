@@ -49,8 +49,8 @@ public class ProductsController
 	@PostMapping()
 	public ResponseEntity<ProdDto1> save(@RequestBody Product product) {
 		Product pa = productsRepo.save(product);
-		Provider<ProdDto1> provider = p -> new ProdDto1(null);
-		TypeMap<ProdDto1, ProdDto1> propertyMapper = modelMapper.createTypeMap(ProdDto1.class, ProdDto1.class);
+		Provider<ProdDto1> provider = p -> new ProdDto1(null, null);
+		TypeMap<Product, ProdDto1> propertyMapper = modelMapper.createTypeMap(Product.class, ProdDto1.class);
 		propertyMapper.setProvider(provider);
 		ProdDto1 p2 = modelMapper.map(pa, ProdDto1.class);
 		return ResponseEntity.status(HttpStatus.OK).body(p2);
