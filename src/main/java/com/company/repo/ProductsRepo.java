@@ -1,11 +1,13 @@
 package com.company.repo;
 
 import com.company.dto.ProductsByOrderView;
+import com.company.dto.TestView;
 import com.company.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
@@ -29,8 +31,11 @@ public interface ProductsRepo extends //Repository<User, Long>
 	//@Override
 	//<T> T save(T entity, Class<T> tClass);
 
-	@Query("select p as product, oi.quantity as quantity from Product p join p.orderItems oi where oi.order.id = ?1")
+	@Query("select p.id as id, p.name as name, oi.quantity as quantity from Product p join p.orderItems oi where oi.order.id = ?1")
 	List<ProductsByOrderView> findProductsByOrderId(long oId);
+
+//	@Query(value = "select 1 as val, 2 as val2", nativeQuery = true)
+//	List<TestView> test();
 
 	//User findById(long id);
 

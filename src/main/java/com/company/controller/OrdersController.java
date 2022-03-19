@@ -21,21 +21,6 @@ public class OrdersController {
 	@Autowired
 	private OrdersRepo ordersRepo;
 
-//	@Autowired
-//	OrdersService ordersService;
-//
-//	@Autowired
-//	OrderItemsRepo orderItemsRepo;
-//
-//	@Autowired
-//	private ProdRepo prodRepo;
-//
-//	@Autowired
-//	private ProductService productService;
-
-//	@Autowired
-//	ProductsController productsController;
-
 //	interface MyEntry extends Map.Entry<Long, Integer> {
 //	}
 

@@ -1,6 +1,8 @@
 package com.company.controller;
 
 import com.company.dto.ProductNamePriceDto;
+import com.company.dto.ProductsByOrderView;
+import com.company.dto.TestView;
 import com.company.model.Product;
 import com.company.repo.ProductsRepo;
 import com.company.view.View;
@@ -10,6 +12,8 @@ import org.modelmapper.Provider;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,8 +32,6 @@ import java.util.Set;
 public class ProductsController
 		//extends SecuredCommand
 {
-	//private final Map<String,Object> session = new HashMap<>();
-
 //	@Autowired
 //	private ProductService productService;
 
@@ -46,7 +49,8 @@ public class ProductsController
 
 	@GetMapping(value = "/{id}/dto")
 	public ResponseEntity<ProductNamePriceDto> getByIdDto(@PathVariable long id) {
-		Optional<ProductNamePriceDto> optional = productsRepo.findById(id, ProductNamePriceDto.class); // it is better for SQL
+		Optional<ProductNamePriceDto> optional = productsRepo.findById(id,
+												ProductNamePriceDto.class); // it is better for SQL
 		if (optional.isPresent())
 			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -76,26 +80,27 @@ public class ProductsController
 	@PostMapping()
 	@JsonView(value = View.UserView.Post.class)
 	public ResponseEntity<Product> save(
-			final @Valid @RequestBody @JsonView(value = View.UserView.Post.class) Product prod, BindingResult result
+			final @Valid @RequestBody @JsonView(value = View.UserView.Post.class) Product prod,
+			BindingResult result
 	) {
 //		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 //		Validator validator = factory.getValidator();
 //		Set<ConstraintViolation<Product>> violations = validator.validate(prod);
 
 		Product pa = null;
-		try {
+		//try {
 			pa = productsRepo.save(prod);
 			return ResponseEntity.status(HttpStatus.OK).body(pa);
-		} catch (DataIntegrityViolationException e) {
-			e.printStackTrace();
-		}
+		//} catch (DataIntegrityViolationException e) {
+		//	e.printStackTrace();
+		//}
 
 //		Provider<ProductNamePriceDto> provider = p -> new ProductNamePriceDto(null, 0);
 //		TypeMap<Product, ProductNamePriceDto> propertyMapper = modelMapper.createTypeMap(Product.class, ProductNamePriceDto.class);
 //		propertyMapper.setProvider(provider);
 //		ProductNamePriceDto p2 = modelMapper.map(pa, ProductNamePriceDto.class);
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	}
 
 
@@ -142,55 +147,30 @@ public class ProductsController
 //		return ProductsFindAllView.render(model);
 //	}
 
-
-//    //TODO
-//	@ShellMethod(key = {"productsByOrderId", "prodsByOId", "pbo"}, value = "Show products by order id.")
 //	@Transactional
-//	public String commandProductsByOrderId(
-//			//@Size(min = 5, max = 40)
-//			@ShellOption(defaultValue = "0") //arity = 3, defaultValue = "deffffff",  help = "Possi"
-//			long oid
-//	)
-//	{
+	@GetMapping(value = "/ProductsByOrder/{oid}")
+//	@ResponseBody
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public List<ProductsByOrderView> productsByOrderId(@PathVariable long oid) {
 //		if (oid == 0)
 //			return commandProducts();
-//
-//		Model model = new ExtendedModelMap();
-//
-//		model.addAttribute("caption", "Products of Order: " + oid);
-//
-//		Iterable<ProductsByOrderView> products = ProductsRepo.findProductsByOrderId(oid);
-//		model.addAttribute("list", products);
-//
-//		return ProductsByOrderView.render(model);
+		List<ProductsByOrderView> products = productsRepo.findProductsByOrderId(oid);
+		return products;
+	}
+
+
+//	@GetMapping(value = "/test")
+//	public ResponseEntity<List<TestView>> test() {
+//		List<TestView> l = productsRepo.test();
+//		return ResponseEntity.status(HttpStatus.OK).body(l);
 //	}
 
 
-
-//	@ShellMethod(key = {"products", "prods", "ps", "pl"}, value = "Show all products.")
-//	public String commandProducts () {
-////		List<User> ulist = new ArrayList<User>() {{
-////				add(new User("User1", new Department("Dep1"), Role.USER));
-////				add(new User("User2", new Department("Dep1"), Role.USER));
-////				add(new User("UserAdmin", new Department("Dep2"), Role.ADMIN));
-////		}};
-////
-////		Object[][] uarr = ulist.stream()
-////				.map(u -> u.toStringsArray() )
-////				.toArray(size -> new Object[size][]);
-////
-////		//StringsArray sa = u;os
-////		//sampleData[1] = u.toStringsArray();
-//
-//		Model model = new ExtendedModelMap();
-//		//Helper.getPage(model, session, userService, 0, "id", "");
-//
-//		model.addAttribute("caption", "Products:");
-//
-//		Iterable<Product> products = ProductsRepo.findAll();
-//		model.addAttribute("list", products);
-//
-//		return ProductsFindAllView.render(model);
-//	}
+	@GetMapping()
+	@JsonView(value = View.UserView.External.class)
+	public List<Product> products(Pageable pageable) {
+		Page<Product> products = productsRepo.findAll(pageable);
+		return products.getContent();
+	}
 
 }

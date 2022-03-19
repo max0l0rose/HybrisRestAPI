@@ -12,7 +12,7 @@ import java.util.Set;
 //@NoArgsConstructor
 @Getter
 @Setter
-@SequenceGenerator(name = "sequenceGen", sequenceName = "seqDepart", allocationSize = 1)
+@SequenceGenerator(name = "sequenceGen2", sequenceName = "seqDepart", allocationSize = 1)
 //@TableGenerator(name="DepTableGen",
 //		table = "sequences",
 //		pkColumnName="SEQ_NAME", // Specify the name of the column of the primary key

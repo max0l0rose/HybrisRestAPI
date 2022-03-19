@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
-import org.springframework.core.annotation.Order;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
 //@Entity // ERROR
 //@Inheritance(strategy = InheritanceType.JOINED)
@@ -21,7 +21,7 @@ public abstract class BaseEntity implements Serializable
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "sequenceGen")
-	@JsonView(value = View.UserView.Internal.class)
+	@JsonView(value = {View.UserView.Internal.class, View.UserView.Post.class})
 	//@JsonProperty
 //	@GeneratedValue(generator = "idSequence")
 //	@SequenceGenerator(//schema = "MYORASCHEMA",
@@ -43,7 +43,8 @@ public abstract class BaseEntity implements Serializable
 			updatable = false, insertable = false)
 	//@CreationTimestamp // hibernate
 	//@Transient
-	@JsonView(value = View.UserView.Internal.class)
+	@JsonView(value = {View.UserView.External.class, View.UserView.Post.class})
+	@Generated(GenerationTime.INSERT)
 	Instant created;
 
 	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",

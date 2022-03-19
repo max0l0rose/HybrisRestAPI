@@ -5,10 +5,12 @@ import com.company.view.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +30,7 @@ public class Product extends BaseEntity
 {
 	@Column(length = 100, columnDefinition = "varchar(50) default 'Shampoo'", nullable = false) // ;)
 	@JsonView(value = {View.UserView.External.class, View.UserView.Post.class})
-	@Min(5)
+	@Size(min = 5, max = 50)
 	@NotBlank
 	String name;
 
@@ -42,7 +44,7 @@ public class Product extends BaseEntity
 	//@Basic(optional = false)
 
 	//@Enumerated
-	@JsonView(value = View.UserView.External.class)
+	@JsonView(value = {View.UserView.External.class, View.UserView.Post.class})
 	ProdStatus status;
 
 

@@ -9,6 +9,7 @@ import java.util.Set;
 //@Projection(name = "prodProj1", types = { Product.class })
 public interface ProdProj1 {
 	String getName();
+	String getCreated();
 	Set<OrderItemsProj> getOrderItems();
 }
 
