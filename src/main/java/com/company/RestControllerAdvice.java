@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 class RestControllerAdvice {
@@ -41,5 +42,11 @@ class RestControllerAdvice {
 //        return new ResponseEntity<>("HhhhandleException: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 //    }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    //@ResponseBody
+    void handleNoSuchElementException(NoSuchElementException e) {
+        //return "NoSuchElementException: " + e.getMessage();
+    }
 }
 

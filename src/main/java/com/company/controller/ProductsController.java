@@ -7,6 +7,7 @@ import com.company.model.Product;
 import com.company.repo.ProductsRepo;
 import com.company.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.Provider;
 import org.modelmapper.TypeMap;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.*;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,132 +31,38 @@ import java.util.Set;
 @RestController
 @RequestMapping("/products")
 @Validated
-public class ProductsController
+public class ProductsController extends BaseController<Product, ProductsRepo>
 		//extends SecuredCommand
 {
 //	@Autowired
 //	private ProductService productService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+//	@Autowired
+//	private ModelMapper modelMapper;
 
-	//@Autowired
-	private ProductsRepo productsRepo;
-
-	public ProductsController(ProductsRepo pRepo) {
-		productsRepo = pRepo;
-	}
-
-
-
-	@GetMapping(value = "/{id}/dto")
-	public ResponseEntity<ProductNamePriceDto> getByIdDto(@PathVariable long id) {
-		Optional<ProductNamePriceDto> optional = productsRepo.findById(id,
-												ProductNamePriceDto.class); // it is better for SQL
-		if (optional.isPresent())
-			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	}
-
-
-	@GetMapping(value = "/{id}")
-	@JsonView(value = View.UserView.External.class)
-	public ResponseEntity<Product> getById(@PathVariable long id) {
-		Optional<Product> optional = productsRepo.findById(id); // gets full object
-		if (optional.isPresent())
-			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	}
-
-	@GetMapping(value = "/{id}/int")
-	@JsonView(value = View.UserView.Internal.class)
-	public ResponseEntity<Product> getByIdInt(@PathVariable long id) {
-		Optional<Product> optional = productsRepo.findById(id);
-		if (optional.isPresent())
-			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	}
-
-
-	// cool. select after insert doesnt happen!
-	@PostMapping()
-	@JsonView(value = View.UserView.Post.class)
-	public ResponseEntity<Product> save(
-			final @Valid @RequestBody @JsonView(value = View.UserView.Post.class) Product prod,
-			BindingResult result
-	) {
-//		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-//		Validator validator = factory.getValidator();
-//		Set<ConstraintViolation<Product>> violations = validator.validate(prod);
-
-		Product pa = null;
-		//try {
-			pa = productsRepo.save(prod);
-			return ResponseEntity.status(HttpStatus.OK).body(pa);
-		//} catch (DataIntegrityViolationException e) {
-		//	e.printStackTrace();
-		//}
-
-//		Provider<ProductNamePriceDto> provider = p -> new ProductNamePriceDto(null, 0);
-//		TypeMap<Product, ProductNamePriceDto> propertyMapper = modelMapper.createTypeMap(Product.class, ProductNamePriceDto.class);
-//		propertyMapper.setProvider(provider);
-//		ProductNamePriceDto p2 = modelMapper.map(pa, ProductNamePriceDto.class);
-
-		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	}
-
-
-//	// w/o this - 500
-//	@ExceptionHandler(ConstraintViolationException.class)
-//	@ResponseStatus(HttpStatus.BAD_REQUEST)
-//	ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-//		return new ResponseEntity<>("Nnnot valid: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+//	public ProductsController(ProductsRepo repo) {
+//		super(repo);
 //	}
 
 
-//	@ShellMethod(key = {"addProduct", "addp", "ap"}, value = "Add/Create product..")
-//	public String commandAddProduct(
-//			//@Size(min = 5, max = 40)
-//			@ShellOption() //arity = 3, defaultValue = "deffffff",  help = "Possi"
-//			String name,
-//			@ShellOption(defaultValue = "0")
-//			int price,
-//			@ShellOption(defaultValue = "IN_STOCK")
-//			String status
-//	)
-//	{
-//		ProdStatus prodStatus;
-//		try {
-//			prodStatus = ProdStatus.valueOf(status);
-//		} catch (IllegalArgumentException ex) {
-//			int iStatus = Integer.valueOf(status);
-//			prodStatus = ProdStatus.fromId(iStatus);
-//		}
-//
-//		Model model = new ExtendedModelMap();
-//
-//		model.addAttribute("caption", "Add a Product:");
-//
-//		Product product = new Product(name, price, prodStatus);
-//
-//		model.addAttribute("body",
-//				//name + ", proce = " + price + ", status" + status.toString()
-//				product.toString()
-//		);
-//
-//		ProductsRepo.save(product);
-//
-//		return ProductsFindAllView.render(model);
+//	@GetMapping(value = "/{id}/dto")
+//	public ResponseEntity<ProductNamePriceDto> getByIdDto(@PathVariable long id) {
+//		Optional<ProductNamePriceDto> optional = productsRepo.findById(id,
+//												ProductNamePriceDto.class); // it is better for SQL
+//		if (optional.isPresent())
+//			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //	}
+
 
 //	@Transactional
 	@GetMapping(value = "/ProductsByOrder/{oid}")
 //	@ResponseBody
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public List<ProductsByOrderView> productsByOrderId(@PathVariable long oid) {
+	public List<ProductsByOrderView> productsByOrderId(@PathVariable long oid, Pageable pageable) {
 //		if (oid == 0)
 //			return commandProducts();
-		List<ProductsByOrderView> products = productsRepo.findProductsByOrderId(oid);
+		List<ProductsByOrderView> products = repo.findProductsByOrderId(oid, pageable);
 		return products;
 	}
 
@@ -165,12 +73,5 @@ public class ProductsController
 //		return ResponseEntity.status(HttpStatus.OK).body(l);
 //	}
 
-
-	@GetMapping()
-	@JsonView(value = View.UserView.External.class)
-	public List<Product> products(Pageable pageable) {
-		Page<Product> products = productsRepo.findAll(pageable);
-		return products.getContent();
-	}
 
 }

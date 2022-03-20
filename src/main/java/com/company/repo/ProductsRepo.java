@@ -32,7 +32,7 @@ public interface ProductsRepo extends //Repository<User, Long>
 	//<T> T save(T entity, Class<T> tClass);
 
 	@Query("select p.id as id, p.name as name, oi.quantity as quantity from Product p join p.orderItems oi where oi.order.id = ?1")
-	List<ProductsByOrderView> findProductsByOrderId(long oId);
+	List<ProductsByOrderView> findProductsByOrderId(long oId, Pageable pageable);
 
 //	@Query(value = "select 1 as val, 2 as val2", nativeQuery = true)
 //	List<TestView> test();

@@ -4,6 +4,7 @@ import com.company.dto.OrderProj2;
 import com.company.model.Order1;
 import com.company.model.Product;
 import com.company.repo.OrdersRepo;
+import com.company.repo.ProductsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,30 +16,55 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/orders")
-public class OrdersController {
-	private final Map<String,Object> session = new HashMap<>();
+public class OrdersController extends BaseController<Order1, OrdersRepo> {
+	//private final Map<String,Object> session = new HashMap<>();
 
-	@Autowired
-	private OrdersRepo ordersRepo;
+//	@Autowired
+//	private OrdersRepo ordersRepo;
 
 //	interface MyEntry extends Map.Entry<Long, Integer> {
 //	}
 
+//	@GetMapping(value = "/{id}")
+//	public ResponseEntity<OrderProj2> firstorder(@PathVariable long id) {
+//		Optional<OrderProj2> optional = ordersRepo.findById(id, OrderProj2.class);
+//		if (optional.isPresent())
+//			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//	}
+//
+//
+//	//@RestResource(rel = "qqq-contains", path="qqq-contains")
+//	@GetMapping(value = "/page")
+//	public ResponseEntity<Page<?>> page(Pageable pageable) {
+//		Page<?> page = ordersRepo.findAllProjectedBy(pageable, OrderProj2.class);
+//		return ResponseEntity.status(HttpStatus.OK).body(page);
+//	}
+//
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<OrderProj2> firstorder(@PathVariable long id) {
-		Optional<OrderProj2> optional = ordersRepo.findById(id, OrderProj2.class);
-		if (optional.isPresent())
-			return ResponseEntity.status(HttpStatus.OK).body(optional.get());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	}
 
+	//@Transactional
+	@GetMapping(value = "/addProdToOrder/{oId}")
+	public String commandAddProdToOrder(
+			long oId, long pId, int quantity
+	) {
+		Order1 order = getByIdInt(oId);
+		order.addProduct(product, quantity);
 
-	//@RestResource(rel = "qqq-contains", path="qqq-contains")
-	@GetMapping(value = "/page")
-	public ResponseEntity<Page<?>> page(Pageable pageable) {
-		Page<?> page = ordersRepo.findAllProjectedBy(pageable, OrderProj2.class);
-		return ResponseEntity.status(HttpStatus.OK).body(page);
+		Model model = new ExtendedModelMap();
+		//Helper.getPage(model, session, ordersService, 0, "id", "");
+
+		model.addAttribute("caption", "Adding a new order " + order.getId());
+		model.addAttribute("body", render.toString());
+
+		String renderResult = IView.render(model);
+
+//		Iterable<Product> products = prodRepo.findAll();
+//		model.addAttribute("list", order.getOrderItems());
+
+		//order = null;
+		ordersService.detach(order);
+		return renderResult + productsController.commandProductsByOrderId(order.getId());
 	}
 
 
