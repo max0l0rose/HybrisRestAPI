@@ -2,6 +2,7 @@ package com.company.controller;
 
 import com.company.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +23,7 @@ public class BaseController<T, Repo extends JpaRepository<T, Long>>
 //	private ModelMapper modelMapper;
 
 	//@Autowired
-	protected Repo repo;
-
-//	public BaseController(Repo pRepo) {
-//		repo = pRepo;
-//	}
+	final protected Repo repo;
 
 	@GetMapping(value = "/{id}/int")
 	@JsonView(value = View.UserView.Internal.class)
@@ -41,7 +38,8 @@ public class BaseController<T, Repo extends JpaRepository<T, Long>>
 	@GetMapping(value = "/{id}")
 	@JsonView(value = View.UserView.External.class)
 	public T getByIdIntExt(@PathVariable long id) {
-		T o = repo.findById(id).orElseThrow(() -> new NoSuchElementException());
+		//T o = repo.findById(id).orElseThrow(() -> new NoSuchElementException());
+		T o = repo.getById(id); //HttpMessageNotWritableException
 		return o;
 	}
 
@@ -81,4 +79,9 @@ public class BaseController<T, Repo extends JpaRepository<T, Long>>
 		return page.getContent();
 	}
 
+	@GetMapping("/int")
+	@JsonView(value = View.UserView.Internal.class)
+	public List<T> findAllInt(Pageable pageable) {
+		return findAll(pageable);
+	}
 }

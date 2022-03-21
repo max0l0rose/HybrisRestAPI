@@ -5,6 +5,12 @@ import com.company.model.Order1;
 import com.company.model.Product;
 import com.company.repo.OrdersRepo;
 import com.company.repo.ProductsRepo;
+import com.company.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +22,20 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/orders")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrdersController extends BaseController<Order1, OrdersRepo> {
 	//private final Map<String,Object> session = new HashMap<>();
 
 //	@Autowired
 //	private OrdersRepo ordersRepo;
+
+
+	public OrdersController(OrdersRepo ordersRepo, ProductsRepo productsRepo) {
+		super(ordersRepo);
+		this.productsRepo = productsRepo;
+	}
+
+	final ProductsRepo productsRepo;
 
 //	interface MyEntry extends Map.Entry<Long, Integer> {
 //	}
@@ -44,27 +59,15 @@ public class OrdersController extends BaseController<Order1, OrdersRepo> {
 
 
 	//@Transactional
-	@GetMapping(value = "/addProdToOrder/{oId}")
-	public String commandAddProdToOrder(
-			long oId, long pId, int quantity
+	@PostMapping(value = "/addProdToOrder/{oid}")
+	@JsonView(value = View.UserView.Internal.class)
+	public Order1 addProdToOrder(
+			@PathVariable long oid, @RequestParam long pid, @RequestParam int quantity
 	) {
-		Order1 order = getByIdInt(oId);
+		Order1 order = getByIdInt(oid);
+		Product product = productsRepo.getById(pid);
 		order.addProduct(product, quantity);
-
-		Model model = new ExtendedModelMap();
-		//Helper.getPage(model, session, ordersService, 0, "id", "");
-
-		model.addAttribute("caption", "Adding a new order " + order.getId());
-		model.addAttribute("body", render.toString());
-
-		String renderResult = IView.render(model);
-
-//		Iterable<Product> products = prodRepo.findAll();
-//		model.addAttribute("list", order.getOrderItems());
-
-		//order = null;
-		ordersService.detach(order);
-		return renderResult + productsController.commandProductsByOrderId(order.getId());
+		return repo.save(order);
 	}
 
 

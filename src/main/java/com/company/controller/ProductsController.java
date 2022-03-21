@@ -40,9 +40,9 @@ public class ProductsController extends BaseController<Product, ProductsRepo>
 //	@Autowired
 //	private ModelMapper modelMapper;
 
-//	public ProductsController(ProductsRepo repo) {
-//		super(repo);
-//	}
+	public ProductsController(ProductsRepo productsRepo) {
+		super(productsRepo);
+	}
 
 
 //	@GetMapping(value = "/{id}/dto")

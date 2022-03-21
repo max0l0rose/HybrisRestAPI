@@ -1,7 +1,8 @@
 package com.company.model;
 
 import com.company.utils.MySet;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.company.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,8 +29,10 @@ public class Order1 extends BaseEntity
 	//@OneToOne
 	//@GeneratedValue//(strategy = GenerationType.IDENTITY)
 	//@JoinColumn(referencedColumnName = "id")
+	@JsonView(value = {View.UserView.External.class, View.UserView.Post.class})
 	private long userId;
 
+	@JsonView(value = {View.UserView.External.class})
 	ProdStatus status = ProdStatus.IN_STOCK;
 
 
@@ -41,7 +44,6 @@ public class Order1 extends BaseEntity
 		this();
 		this.status = status;
 	}
-
 
 
 	@OneToMany(mappedBy = "order",

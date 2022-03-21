@@ -1,7 +1,9 @@
 package com.company;
 
+import org.springframework.beans.NotWritablePropertyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,11 +38,11 @@ class RestControllerAdvice {
 //        return "MMmethodArgumentTypeMismatchException: " + e.getMessage();
 //    }
 
-//    @ExceptionHandler(Exception.class)
-//    @ResponseBody
-//    ResponseEntity<String> handleException(Exception e) {
-//        return new ResponseEntity<>("HhhhandleException: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    ResponseEntity<String> handleException(Exception e) {
+        return new ResponseEntity<>("handleException: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -48,5 +50,11 @@ class RestControllerAdvice {
     void handleNoSuchElementException(NoSuchElementException e) {
         //return "NoSuchElementException: " + e.getMessage();
     }
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    void handleHttpMessageNotWritableException(HttpMessageNotWritableException e) {
+    }
+
 }
 
