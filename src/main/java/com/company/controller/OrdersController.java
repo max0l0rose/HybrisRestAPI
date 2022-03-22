@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.dto.OrderProj2;
+import com.company.dto.addProdsToOrderDto;
 import com.company.model.Order1;
 import com.company.model.Product;
 import com.company.repo.OrdersRepo;
@@ -8,17 +8,8 @@ import com.company.repo.ProductsRepo;
 import com.company.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @RestController
 @RequestMapping("/orders")
@@ -69,6 +60,24 @@ public class OrdersController extends BaseController<Order1, OrdersRepo> {
 		order.addProduct(product, quantity);
 		return repo.save(order);
 	}
+
+
+	//@Transactional
+	@PostMapping(value = "/addProdsToOrder/{oid}")
+	@JsonView(value = View.UserView.Internal.class)
+	public Order1 addProdsToOrder(
+			@PathVariable long oid, @RequestBody addProdsToOrderDto prods
+	) {
+		Order1 order = getByIdInt(oid);
+		long[] prodIds = prods.getProdIds();
+		int[] quantities = prods.getProdQuants();
+		for (int i = prodIds.length-1; i>=0; i--) {
+			Product product = productsRepo.getById(prodIds[i]);
+			order.addProduct(product, quantities[i]);
+		}
+		return repo.save(order);
+	}
+
 
 
 	//	Map<Long, Integer> extractIdsAndQuantity(String idsAndQuantity)
@@ -211,3 +220,5 @@ public class OrdersController extends BaseController<Order1, OrdersRepo> {
 //	}
 
 }
+
+

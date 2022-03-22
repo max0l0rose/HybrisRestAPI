@@ -36,3 +36,22 @@ public class Main {
     }
 }
 
+//    List all products, which have been ordered at least once, with total ordered
+//                     quantity sorted descending by the quantity
+//select product_id, p.name, sum(quantity) as qq
+//                            from order_items
+//                            join product p on p.id = order_items.product_id
+//                            group by product_id
+//                            order by qq DESC;
+
+
+
+//    | Order ID | Products total Price | Product Name | Products Quantity in orderEntry
+//            | Order Created Date [YYYY-MM-DD HH:MM ] | by order Id
+//select order_id, DATE_FORMAT(o.created_at, "%Y-%m-%d %H:%i"), count(product_id), sum(p.price*oi.quantity), sum(quantity)
+//                                    from order_items oi
+//                                    join product p on p.id = oi.product_id
+//                                    join order1 o on o.id = oi.order_id
+//                                    group by order_id
+//                                    order by order_id;
+
