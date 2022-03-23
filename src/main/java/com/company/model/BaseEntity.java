@@ -21,7 +21,7 @@ public abstract class BaseEntity implements Serializable
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "sequenceGen")
-	@JsonView(value = {View.UserView.Internal.class, View.UserView.Post.class})
+	@JsonView(value = {View.UserView.External.class, View.UserView.Post.class})
 	//@JsonProperty
 //	@GeneratedValue(generator = "idSequence")
 //	@SequenceGenerator(//schema = "MYORASCHEMA",

@@ -11,6 +11,14 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
+import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.function.Supplier;
+
 @RestController
 @RequestMapping("/orders")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -71,11 +79,47 @@ public class OrdersController extends BaseController<Order1, OrdersRepo> {
 		Order1 order = getByIdInt(oid);
 		long[] prodIds = prods.getProdIds();
 		int[] quantities = prods.getProdQuants();
-		for (int i = prodIds.length-1; i>=0; i--) {
-			Product product = productsRepo.getById(prodIds[i]);
-			order.addProduct(product, quantities[i]);
-		}
+		new Thread(() -> {
+			for (int i = prodIds.length - 1; i >= 0; i--) {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					break;
+				}
+				Product product = productsRepo.getById(prodIds[i]);
+				order.addProduct(product, quantities[i]);
+			}
+		}).start();
 		return repo.save(order);
+
+//		Arrays.stream(array)
+//				.flatMap(i -> Arrays.stream(i)) //преобразовываем Stream<int[]> в Stream
+//				.toArray();
+//
+//		Executor;
+//		Future;
+//		Supplier;
+//		CompletableFuture;
+//		SynchronousQueue;
+	}
+
+
+	//@Transactional
+	@GetMapping(value = "/test")
+	public void test(
+		//@RequestBody
+				@RequestParam int[][] prods
+	) {
+		//int[][] a = new int[3][4];
+//		int[][] a = {
+//				{1, 2, 3},
+//				{4, 5, 6, 9},
+//				{7},
+//		};
+//		a[0] = new int[2];
+		System.out.println(prods);
+		int b = 1;
 	}
 
 
